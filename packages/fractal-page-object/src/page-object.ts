@@ -90,6 +90,24 @@ export default class PageObject<
   ElementType extends ElementLike = Element
 > extends ArrayStub<ElementType> {
   /**
+   * ember-auto-import has an interesting issue where there is different
+   * webpack layering handling in the test vs the app.  There is an issue at:
+   * https://github.com/embroider-build/ember-auto-import/issues/503.
+   *
+   * Due to this, any time we do an `instanceof` check and consumers may
+   * extend the PageObject class, the check will always return `false`.
+   * This is discussed at:
+   * https://github.com/embroider-build/ember-auto-import/issues/588.
+   *
+   * Due to that, when we are imported with ember-auto-import and in a v2 addon,
+   * we need a way to determine if we are in fact extending the `PageObject`
+   * class.  This property will help us with those lookups, to ensure
+   * we remain backwards compatible with existing code, while also future
+   * proofing a bit for v2 addons.
+   */
+  __isFPO = true as const;
+
+  /**
    * This page object's single matching DOM element -- the first DOM element
    * matching this page object's query if this page object does not have an
    * index, or the `index`th matching DOM element if it does have an index

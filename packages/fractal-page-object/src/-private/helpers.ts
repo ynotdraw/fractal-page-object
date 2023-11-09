@@ -7,7 +7,9 @@ function isPageObjectSubclass<
   T extends PageObject<ElementType>
 >(Class: PageObjectConstructor<ElementType, T>) {
   return (
-    (Class as unknown) === PageObject || Class.prototype instanceof PageObject
+    (Class as unknown) === PageObject ||
+    Class.prototype instanceof PageObject ||
+    (Class as unknown as PageObject).__isFPO
   );
 }
 
